@@ -2,7 +2,6 @@ ready(function(){
 
   // В этом месте должен быть написан ваш код
 
-let fragment = document.createDocumentFragment();
 const burgerButton = document.querySelector('.burger');
 const catalogBooksList = document.querySelector('.catalog__books-list');
 
@@ -25,6 +24,7 @@ function appendEl(container, el) {
 };
 
 function renderCards() {
+  let fragment = document.createDocumentFragment();
   const cardTemplate = document.querySelector('#card__template');
   let booksArr = books.splice(0, 12);
 
