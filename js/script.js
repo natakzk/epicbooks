@@ -5,7 +5,6 @@ ready(function(){
 const burgerButton = document.querySelector('.burger');
 const catalogBooksList = document.querySelector('.catalog__books-list');
 
-
 function openMainNav(e) {
   e.preventDefault();
   const mainNav = document.querySelector('.main-nav');
@@ -15,18 +14,18 @@ function openMainNav(e) {
 
 burgerButton.addEventListener('click', openMainNav);
 
-function setValue(elem, selector, prop, val) {
-  elem.querySelector('.card__' + selector)[prop] = val;
-}
-
-function appendEl(container, el) {
-  container.appendChild(el);
-};
-
 function renderCards() {
   let fragment = document.createDocumentFragment();
   const cardTemplate = document.querySelector('#card__template');
   let booksArr = books.splice(0, 12);
+
+  function setValue(elem, selector, prop, val) {
+    elem.querySelector('.card__' + selector)[prop] = val;
+  }
+
+  function appendEl(container, el) {
+    container.appendChild(el);
+  };
 
   booksArr.forEach(function(item, i) {
     const newCard = cardTemplate.content.cloneNode(true);
