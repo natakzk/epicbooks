@@ -2,21 +2,32 @@ ready(function(){
 
   // В этом месте должен быть написан ваш код
 
+// открытие меню
+function openMainNav() {
 const burgerButton = document.querySelector('.burger');
-const catalogBooksList = document.querySelector('.catalog__books-list');
-const filtersButton = document.querySelector('.filters__trigger');
-
-function openMainNav(e) {
+function burgerTrigger(e) {
   e.preventDefault();
   const mainNav = document.querySelector('.main-nav');
   mainNav.classList.toggle('main-nav--open');
   burgerButton.classList.toggle('burger--close');
 }
+burgerButton.addEventListener('click', burgerTrigger);
+}
 
-burgerButton.addEventListener('click', openMainNav);
+// показ фильтра
+function showFilters() {
+const filtersButton = document.querySelector('.filters__trigger');
+function filterTrigger(e) {
+  e.preventDefault();
+  document.querySelector('.filters').classList.toggle('filters--open');
+}
+filtersButton.addEventListener('click', filterTrigger);
+}
 
+// отрисовка карточек
 function renderCards() {
   let fragment = document.createDocumentFragment();
+  const catalogBooksList = document.querySelector('.catalog__books-list');
   const cardTemplate = document.querySelector('#card__template');
   let booksArr = books.splice(0, 12);
 
@@ -43,14 +54,11 @@ function renderCards() {
   appendEl(catalogBooksList, fragment)
 }
 
+
 renderCards();
+openMainNav();
+showFilters();
 
-function filterTrigger(e) {
-  e.preventDefault();
-  document.querySelector('.filters').classList.toggle('filters--open');
-}
-
-filtersButton.addEventListener('click', filterTrigger);
 
 
 
