@@ -4,6 +4,7 @@ ready(function(){
 
 const burgerButton = document.querySelector('.burger');
 const catalogBooksList = document.querySelector('.catalog__books-list');
+const filtersButton = document.querySelector('.filters__trigger');
 
 function openMainNav(e) {
   e.preventDefault();
@@ -43,6 +44,13 @@ function renderCards() {
 }
 
 renderCards();
+
+function filterTrigger(e) {
+  e.preventDefault();
+  document.querySelector('.filters').classList.toggle('filters--open');
+}
+
+filtersButton.addEventListener('click', filterTrigger);
 
 
 
