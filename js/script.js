@@ -46,14 +46,53 @@ function renderCards() {
     setValue(newCard, 'img', 'alt', item.name);
     setValue(newCard, 'title', 'textContent', item.name);
     setValue(newCard, 'price', 'textContent', item.price + ' ₽');
-    if (item.new) {
-      newCard.querySelector('.card__new').classList.remove('hidden');
-    }
-    appendEl(fragment, newCard)
+
+    appendEl(fragment, newCard);
   })
-  appendEl(catalogBooksList, fragment)
+  appendEl(catalogBooksList, fragment);
+
+  function setCardId() {
+    const cardList = document.querySelector('.catalog__books-list').querySelectorAll('.card');
+
+    for (var i = 0; i < cardList.length; i++) {
+      const card = cardList[i];
+      card.setAttribute('id', i);
+    }
+  }
+  setCardId();
 }
 
+
+
+function createModal() {
+  const modalDialog = document.querySelector('.modal__dialog');
+  const modalTemplate = document.querySelector('#modal__template');
+  const newModal = modalTemplate.content.cloneNode(true);
+
+  let booksArr = books.splice(0, 12);
+
+  function setValue(elem, selector, prop, val) {
+    elem.querySelector('.product__' + selector)[prop] = val;
+  }
+
+  booksArr.forEach(function(item, i) {
+    setValue(newModal, 'img', 'src', 'img/' + item.uri + '.jpg');
+    setValue(newModal, 'img', 'alt', item.name);
+    setValue(newModal, 'title', 'textContent', item.name);
+    setValue(newModal, 'desc', 'textContent', item.desc);
+    newModal.querySelector('.btn--price').firstChild.textContent = item.price + ' ₽';
+  })
+
+  modalDialog.appendChild(newModal);
+  return newModal;
+};
+
+
+function openModal() {
+  createModal()
+  document.querySelector('.modal').classList.add('modal--open');
+  document.querySelector('html').classList.add('js-modal-open');
+}
 
 renderCards();
 openMainNav();
@@ -61,31 +100,10 @@ showFilters();
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+for (var i = 0; i < 12; i++) {
+  let article = document.getElementById(i);
+  article.addEventListener('click', openModal);
+}
 
 
 
