@@ -57,11 +57,12 @@ function renderCards() {
     for (var i = 0; i < cardList.length; i++) {
       const card = cardList[i];
       card.setAttribute('id', i);
+      card.addEventListener('click', openModal);
     }
   }
   setCardId();
 }
-
+renderCards();
 
 
 function createModal() {
@@ -94,16 +95,12 @@ function openModal() {
   document.querySelector('html').classList.add('js-modal-open');
 }
 
-renderCards();
+
 openMainNav();
 showFilters();
 
 
 
-for (var i = 0; i < 12; i++) {
-  let article = document.getElementById(i);
-  article.addEventListener('click', openModal);
-}
 
 
 
