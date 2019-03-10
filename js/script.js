@@ -75,24 +75,6 @@ function createModal(item) {
 
 // отрисовка попапа
 function renderModal() {
-  function createModal(item) {
-    const modalDialog = document.querySelector('.modal__dialog');
-    const modalTemplate = document.querySelector('#modal__template');
-    const newModal = modalTemplate.content.cloneNode(true);
-
-    function fillModal() {
-      function setValue(elem, selector, prop, val) {
-        elem.querySelector('.product__' + selector)[prop] = val;
-      }
-      setValue(newModal, 'img', 'src', 'img/' + item.uri + '.jpg');
-      setValue(newModal, 'img', 'alt', item.name);
-      setValue(newModal, 'title', 'textContent', item.name);
-      setValue(newModal, 'desc', 'textContent', item.desc);
-      newModal.querySelector('.btn--price').firstChild.textContent = item.price + ' ₽';
-      modalDialog.appendChild(newModal);
-    }
-    fillModal();
-  };
 
   function modalTrigger() {
     const articles = document.querySelectorAll('.card');
