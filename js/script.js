@@ -1,51 +1,53 @@
 ready(function(){
 
   // В этом месте должен быть написан ваш код
+let fragment = document.createDocumentFragment();
 let booksArr = books.splice(0, 12);
+const burgerButton = document.querySelector('.burger');
+const filtersButton = document.querySelector('.filters__trigger');
+const modal = document.getElementById('modal-book-view');
+const modalDialog = document.querySelector('.modal__dialog');
+const mainNav = document.querySelector('.main-nav');
+const catalogBooksList = document.querySelector('.catalog__books-list');
+const articles = document.querySelectorAll('.card')
+const modalTemplate = document.querySelector('#modal__template');
+const cardTemplate = document.querySelector('#card__template');
+
+
+function setValue(elem, elemName, selector, prop, val) {
+  elem.querySelector('.' + elemName + '__' + selector)[prop] = val;
+}
+
+function appendEl(container, el) {
+  container.appendChild(el);
+}
 
 // открытие меню
-function openMainNav() {
-  const burgerButton = document.querySelector('.burger');
-  function burgerTrigger(e) {
-    e.preventDefault();
-    const mainNav = document.querySelector('.main-nav');
-    mainNav.classList.toggle('main-nav--open');
-    burgerButton.classList.toggle('burger--close');
-  }
-  burgerButton.addEventListener('click', burgerTrigger);
+function openMainNav(e) {
+  e.preventDefault();
+  const mainNav = document.querySelector('.main-nav');
+  mainNav.classList.toggle('main-nav--open');
+  burgerButton.classList.toggle('burger--close');
 }
+burgerButton.addEventListener('click', openMainNav);
 
 // показ фильтра
-function showFilters() {
-  const filtersButton = document.querySelector('.filters__trigger');
-  function filterTrigger(e) {
-    e.preventDefault();
-    document.querySelector('.filters').classList.toggle('filters--open');
-  }
-  filtersButton.addEventListener('click', filterTrigger);
+function showFilters(e) {
+  e.preventDefault();
+  document.querySelector('.filters').classList.toggle('filters--open');
 }
+filtersButton.addEventListener('click', showFilters);
+
 
 // отрисовка карточек
 function renderCards() {
-  let fragment = document.createDocumentFragment();
-  const catalogBooksList = document.querySelector('.catalog__books-list');
-  const cardTemplate = document.querySelector('#card__template');
-
-  function setValue(elem, selector, prop, val) {
-    elem.querySelector('.card__' + selector)[prop] = val;
-  }
-
-  function appendEl(container, el) {
-    container.appendChild(el);
-  };
-
   booksArr.forEach(function(item, i) {
     let newCard = cardTemplate.content.cloneNode(true);
-    setValue(newCard, 'inner', 'href', 'index.html#' + item.uri);
-    setValue(newCard, 'img', 'src', 'img/' + item.uri + '.jpg');
-    setValue(newCard, 'img', 'alt', item.name);
-    setValue(newCard, 'title', 'textContent', item.name);
-    setValue(newCard, 'price', 'textContent', item.price + ' ₽');
+    setValue(newCard, 'card', 'inner', 'href', 'index.html#' + item.uri);
+    setValue(newCard, 'card', 'img', 'src', 'img/' + item.uri + '.jpg');
+    setValue(newCard, 'card', 'img', 'alt', item.name);
+    setValue(newCard, 'card', 'title', 'textContent', item.name);
+    setValue(newCard, 'card', 'price', 'textContent', item.price + ' ₽');
     newCard.querySelector('.card').setAttribute('id', i);
     appendEl(fragment, newCard);
   })
@@ -54,57 +56,41 @@ function renderCards() {
 renderCards();
 
 // создание попапа
-function createModal(item) {
-  const modalDialog = document.querySelector('.modal__dialog');
-  const modalTemplate = document.querySelector('#modal__template');
+function fillModal(item) {
   const newModal = modalTemplate.content.cloneNode(true);
-
-  function fillModal() {
-    function setValue(elem, selector, prop, val) {
-      elem.querySelector('.product__' + selector)[prop] = val;
-    }
-    setValue(newModal, 'img', 'src', 'img/' + item.uri + '.jpg');
-    setValue(newModal, 'img', 'alt', item.name);
-    setValue(newModal, 'title', 'textContent', item.name);
-    setValue(newModal, 'desc', 'textContent', item.desc);
-    newModal.querySelector('.btn--price').firstChild.textContent = item.price + ' ₽';
-    modalDialog.appendChild(newModal);
-  }
-  fillModal();
-};
-
-// отрисовка попапа
-function renderModal() {
-
-  function modalTrigger() {
-    const articles = document.querySelectorAll('.card');
-    function openPopup(e) {
-      let target = e.currentTarget;
-      if (target.classList.contains('card__inner')) {
-        let targetId = target.parentElement.id;
-      }
-
-      createModal(booksArr[target.id])
-      document.querySelector('.modal').classList.add('modal--open');
-      document.querySelector('html').classList.add('js-modal-open');
-    }
-
-    for (var i = 0; i < articles.length; i++) {
-      articles[i].addEventListener('click', openPopup);
-    }
-  }
-  modalTrigger();
+  setValue(newModal, 'product', 'img', 'src', 'img/' + item.uri + '.jpg');
+  setValue(newModal, 'product', 'img', 'alt', item.name);
+  setValue(newModal, 'product', 'title', 'textContent', item.name);
+  setValue(newModal, 'product', 'desc', 'textContent', item.desc);
+  newModal.querySelector('.btn--price').firstChild.textContent = item.price + ' ₽';
+  appendEl(fragment, newModal);
+  appendEl(modalDialog, fragment);
 }
 
-renderModal();
-openMainNav();
-showFilters();
+function changeModalClasses() {
+  document.querySelector('.modal').classList.toggle('modal--open');
+  document.querySelector('html').classList.toggle('js-modal-open');
+}
 
+// открытие попапа
+function openPopup(e) {
+  let target = e.currentTarget;
+  if (target.classList.contains('card__inner')) {
+    let targetId = target.parentElement.id;
+  }
+  fillModal(booksArr[target.id]);
+  changeModalClasses();
+}
 
+// обработчик клика по попапу
+function modalTrigger() {
+  const articles = document.querySelectorAll('.card');
 
-
-
-
+  for (var i = 0; i < articles.length; i++) {
+    articles[i].addEventListener('click', openPopup);
+  }
+}
+modalTrigger();
 
 
 
