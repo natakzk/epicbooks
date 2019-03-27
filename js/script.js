@@ -5,14 +5,13 @@ let fragment = document.createDocumentFragment();
 let booksArr = books.splice(0, 12);
 const burgerButton = document.querySelector('.burger');
 const filtersButton = document.querySelector('.filters__trigger');
-const modal = document.getElementById('modal-book-view');
+const modal = document.querySelector('.modal');
 const modalDialog = document.querySelector('.modal__dialog');
 const mainNav = document.querySelector('.main-nav');
 const catalogBooksList = document.querySelector('.catalog__books-list');
 const articles = document.querySelectorAll('.card')
 const modalTemplate = document.querySelector('#modal__template');
 const cardTemplate = document.querySelector('#card__template');
-
 
 function setValue(elem, elemName, selector, prop, val) {
   elem.querySelector('.' + elemName + '__' + selector)[prop] = val;
@@ -55,9 +54,16 @@ function renderCards() {
 }
 renderCards();
 
+function changeModalClasses() {
+  document.querySelector('.modal').classList.toggle('modal--open');
+  document.querySelector('html').classList.toggle('js-modal-open');
+}
+
+
 // создание попапа
 function fillModal(item) {
   const newModal = modalTemplate.content.cloneNode(true);
+  const modalClose = newModal.querySelector('.modal__close');
   setValue(newModal, 'product', 'img', 'src', 'img/' + item.uri + '.jpg');
   setValue(newModal, 'product', 'img', 'alt', item.name);
   setValue(newModal, 'product', 'title', 'textContent', item.name);
@@ -65,11 +71,7 @@ function fillModal(item) {
   newModal.querySelector('.btn--price').firstChild.textContent = item.price + ' ₽';
   appendEl(fragment, newModal);
   appendEl(modalDialog, fragment);
-}
-
-function changeModalClasses() {
-  document.querySelector('.modal').classList.toggle('modal--open');
-  document.querySelector('html').classList.toggle('js-modal-open');
+  closePopup(modalClose);
 }
 
 // открытие попапа
@@ -84,13 +86,26 @@ function openPopup(e) {
 
 // обработчик клика по попапу
 function modalTrigger() {
-  const articles = document.querySelectorAll('.card');
-
+  const articles = document.querySelector('.catalog__books-list').querySelectorAll('.card');
   for (var i = 0; i < articles.length; i++) {
     articles[i].addEventListener('click', openPopup);
   }
 }
 modalTrigger();
+
+// закрытие попапа
+function closePopup(btn) {
+  btn.addEventListener('click', function() {
+    changeModalClasses();
+    modal.removeEventListener('click', closePopup);
+  });
+}
+
+
+
+
+
+
 
 
 
